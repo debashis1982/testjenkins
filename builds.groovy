@@ -1,24 +1,14 @@
 // MyProject-Build.groovy
 def gitUrl = "https://github.com/debashis1982/MySpringBoot"
 
-job("MyProject-Build") {
-    description "Builds MyProject from master branch."
-    parameters {
-        stringParam('COMMIT', 'HEAD', 'Commit to build')
-    }
+job('Build-MySpringBoot') {
     scm {
-        git {
-            remote {
-                url gitUrl.
-                branch "origin/master"
-            }
-            extensions {
-                wipeOutWorkspace()
-                localBranch master
-            }
-        }
+        git(gitUrl)
+    }
+    triggers {
+        scm('*/15 * * * *')
     }
     steps {
-        shell "Look: I'm building master!"
+        maven('-e clean test')
     }
 }
